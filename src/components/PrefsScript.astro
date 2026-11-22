@@ -1,0 +1,15 @@
+---
+// Runs before first paint. Mirrors resolvePref() in src/lib/prefs.ts (unit-tested there);
+// kept inline and dependency-free so it can't be deferred or bundled.
+---
+<script is:inline>
+  (function () {
+    var d = document.documentElement;
+    function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function sys(q) { return !!(window.matchMedia && window.matchMedia(q).matches); }
+    var t = get("mj-theme");
+    d.dataset.theme = t === "dark" || t === "light" ? t : sys("(prefers-color-scheme: light)") ? "light" : "dark";
+    var m = get("mj-motion");
+    d.dataset.motion = m === "full" || m === "reduce" ? m : sys("(prefers-reduced-motion: reduce)") ? "reduce" : "full";
+  })();
+</script>

@@ -1,0 +1,71 @@
+---
+import { SECTIONS, WHATSAPP_URL, BOOKING_URL, EMAIL, TIMEZONE_LABEL } from "../lib/site";
+import Cta from "./Cta.astro";
+import PrefToggles from "./PrefToggles.astro";
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+---
+<aside data-testid="sidebar" class="sticky top-0 hidden max-h-dvh flex-col gap-5 overflow-y-auto border-r border-line px-5 py-6 lg:flex">
+  <div>
+    <p class="font-display text-2xl font-bold tracking-tight">Melvine Jerry</p>
+    <p class="mt-1 max-w-[30ch] text-muted">I build AI agents, automations and web apps that answer customers and save hours.</p>
+  </div>
+
+  <nav aria-label="Sections" class="signal-nav">
+    <ul class="relative">
+      {SECTIONS.map((s) => (
+        <li>
+          <a href={`#${s.id}`} class="flex min-h-[44px] items-center gap-2 text-muted transition-colors hover:text-text aria-[current=true]:text-text">
+            <span class="pad" aria-hidden="true"></span>
+            <span>{s.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="flex flex-col gap-1.5">
+    <Cta href={WHATSAPP_URL} external><WhatsAppIcon />Chat on WhatsApp</Cta>
+    <Cta href={BOOKING_URL} variant="secondary">Book a 15-min call</Cta>
+    <a href={`mailto:${EMAIL}`} class="inline-flex min-h-[44px] items-center text-sm text-muted underline decoration-border underline-offset-4 hover:text-text">{EMAIL}</a>
+  </div>
+
+  <div class="mt-auto flex flex-col gap-1.5 pt-2">
+    <p class="text-sm text-muted">Based in Kenya, working in {TIMEZONE_LABEL}</p>
+    <PrefToggles />
+  </div>
+</aside>
+
+<script>
+  import { initNavHighlight } from "../scripts/nav-highlight";
+  const nav = document.querySelector<HTMLElement>('nav[aria-label="Sections"]');
+  if (nav) initNavHighlight(nav);
+</script>
+
+<style>
+  /* Nav as a column of solder pads joined by a copper trace. */
+  .signal-nav ul::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 22px;
+    bottom: 22px;
+    width: 2px;
+    background: var(--c-line);
+  }
+  .pad {
+    position: relative;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--c-border);
+    background: var(--c-bg);
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  a:hover .pad { border-color: var(--c-text); }
+  a[aria-current="true"] .pad {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-accent) 20%, transparent);
+  }
+</style>

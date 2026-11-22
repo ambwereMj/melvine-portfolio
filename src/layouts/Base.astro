@@ -1,0 +1,27 @@
+---
+import "../styles/global.css";
+import PrefsScript from "../components/PrefsScript.astro";
+import displayFont from "@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-700-normal.woff2?url";
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+
+// Headline face: preloaded, and `optional` so a late arrival never swaps in and re-wraps the LCP headline (CLS).
+const displayFace = `@font-face{font-family:"Schibsted Grotesk";font-style:normal;font-weight:700;font-display:optional;src:url("${displayFont}") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <PrefsScript />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={displayFace}></style>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0B0F0E" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F4F1EA" media="(prefers-color-scheme: light)" />
+  </head>
+  <body class="bg-bg text-text antialiased">
+    <slot />
+  </body>
+</html>

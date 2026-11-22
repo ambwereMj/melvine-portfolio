@@ -1,0 +1,13 @@
+---
+import { WHATSAPP_URL, BOOKING_URL } from "../lib/site";
+import Cta from "./Cta.astro";
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+---
+<nav aria-label="Quick contact" data-testid="bottom-bar" class="bottom-bar sticky bottom-0 z-40 grid grid-cols-2 gap-1 border-t border-line bg-bg px-2 pt-1 lg:hidden">
+  <Cta href={WHATSAPP_URL} external><WhatsAppIcon />WhatsApp</Cta>
+  <Cta href={BOOKING_URL} variant="secondary">Book call</Cta>
+</nav>
+
+<style>
+  .bottom-bar { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+</style>

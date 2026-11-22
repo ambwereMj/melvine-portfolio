@@ -1,0 +1,9 @@
+---
+interface Props { id: string; label: string; stage: number }
+const { id, label, stage } = Astro.props;
+---
+<section id={id} aria-labelledby={`${id}-title`} class="scroll-mt-3 border-b border-line py-8 lg:py-12">
+  <h2 id={`${id}-title`} class="text-xl">{label}</h2>
+  <p class="mt-1 max-w-[60ch] text-muted">Content for this section arrives in Stage {stage}.</p>
+  <slot />
+</section>

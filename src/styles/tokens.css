@@ -1,0 +1,104 @@
+/*
+ * Design tokens. Colours mirror src/lib/palette.ts (kept in sync by tests/unit/tokens-sync.test.ts).
+ * Spacing: 8-point grid. Tailwind's `--spacing` unit is 8px, so p-1 = 8px, p-2 = 16px, p-0.5 = 4px.
+ */
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --c-bg: #0B0F0E;
+  --c-surface: #121917;
+  --c-text: #E6EDEA;
+  --c-muted: #9AABA4;
+  --c-accent: #3DDC97;
+  --c-on-accent: #0B0F0E;
+  --c-accent2: #F5A623;
+  --c-accent2-text: #F5A623;
+  --c-border: #5E716A;
+  --c-line: #22302B;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --c-bg: #F4F1EA;
+  --c-surface: #FFFFFF;
+  --c-text: #14201B;
+  --c-muted: #4D5A54;
+  --c-accent: #0B7A4B;
+  --c-on-accent: #FFFFFF;
+  --c-accent2: #D9480F;
+  --c-accent2-text: #B83D0C;
+  --c-border: #7A847F;
+  --c-line: #DCD6C8;
+}
+
+/* No-JS fallback: the inline script normally sets data-theme before paint. */
+:root:not([data-theme]) {
+  color-scheme: dark;
+  --c-bg: #0B0F0E;
+  --c-surface: #121917;
+  --c-text: #E6EDEA;
+  --c-muted: #9AABA4;
+  --c-accent: #3DDC97;
+  --c-on-accent: #0B0F0E;
+  --c-accent2: #F5A623;
+  --c-accent2-text: #F5A623;
+  --c-border: #5E716A;
+  --c-line: #22302B;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --c-bg: #F4F1EA;
+    --c-surface: #FFFFFF;
+    --c-text: #14201B;
+    --c-muted: #4D5A54;
+    --c-accent: #0B7A4B;
+    --c-on-accent: #FFFFFF;
+    --c-accent2: #D9480F;
+    --c-accent2-text: #B83D0C;
+    --c-border: #7A847F;
+    --c-line: #DCD6C8;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-accent: var(--c-accent);
+  --color-on-accent: var(--c-on-accent);
+  --color-accent2: var(--c-accent2);
+  --color-accent2-text: var(--c-accent2-text);
+  --color-border: var(--c-border);
+  --color-line: var(--c-line);
+}
+
+@theme {
+  --spacing: 8px;
+
+  --font-display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+
+  /* Fluid type scale, ~1.25 ratio on mobile → ~1.333 on desktop (375px → 1440px). */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: clamp(1rem, 0.96rem + 0.19vw, 1.125rem);
+  --text-base--line-height: 1.6;
+  --text-lg: clamp(1.25rem, 1.18rem + 0.28vw, 1.5rem);
+  --text-lg--line-height: 1.4;
+  --text-xl: clamp(1.5625rem, 1.42rem + 0.6vw, 2rem);
+  --text-xl--line-height: 1.25;
+  --text-2xl: clamp(1.953rem, 1.7rem + 1.1vw, 2.667rem);
+  --text-2xl--line-height: 1.15;
+  --text-display: clamp(2.441rem, 1.9rem + 2.4vw, 4.209rem);
+  --text-display--line-height: 1.05;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --breakpoint-lg: 64rem; /* 1024px: sidebar layout */
+}
