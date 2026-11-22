@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { BOOKING_URL } from "../../src/lib/site";
 
 const WHATSAPP_URL =
   "https://wa.me/254110753069?text=" +
@@ -44,7 +45,7 @@ test.describe("mobile shell", () => {
     await expect(bar).toBeVisible();
     await expect(page.getByRole("navigation", { name: "Sections" })).toBeHidden();
     await expect(bar.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", WHATSAPP_URL);
-    await expect(bar.getByRole("link", { name: /Book call/ })).toHaveAttribute("href", "#contact");
+    await expect(bar.getByRole("link", { name: /Book call/ })).toHaveAttribute("href", BOOKING_URL);
   });
 
   test("bottom bar never covers the footer", async ({ page }) => {

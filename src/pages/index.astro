@@ -5,6 +5,8 @@ import Sidebar from "../components/Sidebar.astro";
 import MobileHeader from "../components/MobileHeader.astro";
 import BottomBar from "../components/BottomBar.astro";
 import Section from "../components/Section.astro";
+import Hero from "../components/Hero.astro";
+import ProofStrip from "../components/ProofStrip.astro";
 import Cta from "../components/Cta.astro";
 import WhatsAppIcon from "../components/WhatsAppIcon.astro";
 import { SECTIONS, WHATSAPP_URL, EMAIL } from "../lib/site";
@@ -19,10 +21,7 @@ const rest = SECTIONS.filter((s) => s.id !== "hero");
     <div class="min-w-0">
       <MobileHeader />
       <main id="main" tabindex="-1" class="px-2 outline-none sm:px-4 lg:px-8">
-        <section id="hero" aria-labelledby="hero-title" class="scroll-mt-3 border-b border-line py-8 lg:py-16">
-          <h1 id="hero-title" class="max-w-[18ch] text-display tracking-tight">Your headline goes here. You pick it in Stage 2.</h1>
-          <p class="mt-2 max-w-[60ch] text-lg text-muted">The supporting sentence, CTAs, availability badge and proof strip also land in Stage 2.</p>
-        </section>
+        <Hero><ProofStrip /></Hero>
         {rest.map((s) => <Section id={s.id} label={s.label} stage={stageFor[s.id]} />)}
       </main>
       <footer class="flex flex-col gap-2 px-2 py-8 sm:px-4 lg:px-8">

@@ -1,8 +1,11 @@
 ---
-// Runs before first paint. Mirrors resolvePref() in src/lib/prefs.ts (unit-tested there);
-// kept inline and dependency-free so it can't be deferred or bundled.
+// Runs before first paint. Mirrors resolvePref() in src/lib/prefs.ts and audienceFor() in
+// src/lib/audience.ts (unit-tested there); kept inline and dependency-free so it can't be deferred or bundled.
+import { PROFILE } from "../content/profile";
+// Badge expiry: end of the validUntil day in EAT (UTC+3).
+const badgeUntil = Date.parse(`${PROFILE.availability.validUntil}T23:59:59+03:00`);
 ---
-<script is:inline>
+<script is:inline define:vars={{ badgeUntil }}>
   (function () {
     var d = document.documentElement;
     function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -11,5 +14,9 @@
     d.dataset.theme = t === "dark" || t === "light" ? t : sys("(prefers-color-scheme: light)") ? "light" : "dark";
     var m = get("mj-motion");
     d.dataset.motion = m === "full" || m === "reduce" ? m : sys("(prefers-reduced-motion: reduce)") ? "reduce" : "full";
+    var tz = "";
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
+    if (Date.now() > badgeUntil) d.dataset.badge = "expired";
+    d.dataset.audience = !tz || tz.indexOf("Africa/") === 0 ? "local" : "international";
   })();
 </script>

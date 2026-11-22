@@ -56,3 +56,14 @@
     }
   }
 }
+
+/* Audience-specific content (set before paint by PrefsScript). Unlayered so it beats display utilities.
+   No attribute (no JS) behaves like "local". */
+[data-audience="international"] [data-for="local"],
+[data-audience="local"] [data-for="international"],
+:root:not([data-audience]) [data-for="international"] {
+  display: none;
+}
+
+/* Time-limited content (e.g. the availability badge) hides once its date passes; set before paint. */
+[data-badge="expired"] [data-expires] { display: none; }

@@ -1,0 +1,45 @@
+---
+import { PROFILE, badgeText } from "../content/profile";
+import { WHATSAPP_URL, BOOKING_URL, EMAIL, GITHUB_URL, TIMEZONE_LABEL } from "../lib/site";
+import Cta from "./Cta.astro";
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+
+const quiet = "inline-flex min-h-[44px] items-center underline decoration-border underline-offset-4 hover:text-text";
+---
+<section id="hero" aria-labelledby="hero-title" class="scroll-mt-3 border-b border-line pt-5 pb-8 lg:pt-16 lg:pb-12">
+  <p data-testid="availability" data-expires class="inline-flex items-center gap-1 rounded-full border border-line py-0.5 pr-1.5 pl-1 text-sm text-muted">
+    <span class="signal-dot" aria-hidden="true"></span>{badgeText(PROFILE.availability, TIMEZONE_LABEL)}
+  </p>
+
+  <h1 id="hero-title" class="mt-2 max-w-[20ch] text-display tracking-tight">{PROFILE.headline}</h1>
+  <p class="mt-2 max-w-[52ch] text-lg text-muted">{PROFILE.subline}</p>
+
+  <div class="mt-4 grid gap-1.5 sm:flex sm:flex-wrap" data-for="local">
+    <Cta href={WHATSAPP_URL} external><WhatsAppIcon />Chat on WhatsApp</Cta>
+    <Cta href="#work" variant="secondary">See my work</Cta>
+  </div>
+  <div class="mt-4 grid gap-1.5 sm:flex sm:flex-wrap" data-for="international">
+    <Cta href={BOOKING_URL}>Book a 15-min call</Cta>
+    <Cta href={`mailto:${EMAIL}`} variant="secondary">Email me</Cta>
+  </div>
+
+  <p data-testid="reassurance" class="mt-2 max-w-[80ch] text-sm text-pretty text-muted">{PROFILE.reassurance}</p>
+
+  <p data-testid="recruiter" class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-muted">
+    <span>Hiring?</span>
+    {PROFILE.cvUrl ? <a href={PROFILE.cvUrl} class={quiet} download>Download CV</a> : <span>CV coming soon</span>}
+    <a href={GITHUB_URL} class={quiet} target="_blank" rel="noopener">View GitHub</a>
+  </p>
+
+  <slot />
+</section>
+
+<style>
+  .signal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c-accent2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent2) 25%, transparent);
+  }
+</style>
