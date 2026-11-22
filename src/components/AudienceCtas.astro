@@ -1,0 +1,19 @@
+---
+// Two CTA pairs; CSS shows the one matching <html data-audience> (set before paint). First item is primary.
+import Cta from "./Cta.astro";
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+
+interface Link { label: string; href: string; external?: boolean; whatsapp?: boolean }
+interface Props { local: Link[]; international: Link[]; class?: string }
+const { local, international, class: extra = "" } = Astro.props;
+const groups = [["local", local], ["international", international]] as const;
+---
+{groups.map(([audience, links]) => (
+  <div class:list={["grid gap-1.5 sm:flex sm:flex-wrap", extra]} data-for={audience}>
+    {links.map((l, i) => (
+      <Cta href={l.href} external={l.external} variant={i === 0 ? "primary" : "secondary"}>
+        {l.whatsapp && <WhatsAppIcon />}{l.label}
+      </Cta>
+    ))}
+  </div>
+))}

@@ -1,0 +1,43 @@
+---
+import { SERVICES, RUNNING_COSTS } from "../content/services";
+import { formatPrice } from "../lib/price";
+import { whatsappUrlFor, EMAIL } from "../lib/site";
+import Cta from "./Cta.astro";
+---
+<section id="services" aria-labelledby="services-title" class="scroll-mt-3 border-b border-line py-8 lg:py-12">
+  <h2 id="services-title" class="text-xl">Services</h2>
+  <p class="mt-1 max-w-[60ch] text-muted">Three fixed-scope ways to work together. Every project starts with a short call and a written quote.</p>
+
+  <div class="mt-4 grid gap-3 xl:grid-cols-3">
+    {SERVICES.map((s) => (
+      <article class="flex flex-col gap-2 rounded-sm border border-border p-3">
+        <h3 class="text-lg">{s.name}</h3>
+        <p class="font-display text-lg">
+          <span data-for="local">From {formatPrice(s.price.local)}</span>
+          <span data-for="international">From {formatPrice(s.price.international)}</span>
+        </p>
+        {s.addOn && (
+          <p class="-mt-1 text-sm text-muted" data-for="local">{s.addOn.label} from {formatPrice(s.addOn.price)}</p>
+        )}
+        <p class="text-muted">{s.forWho}</p>
+        <ul class="included flex flex-col gap-1 text-sm">
+          {s.includes.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="mt-auto pt-1 text-sm text-muted">Typical timeline: {s.timeline}</p>
+        <div data-for="local" class="grid">
+          <Cta href={whatsappUrlFor(s.name)} external>Get a quote in 24h</Cta>
+        </div>
+        <div data-for="international" class="grid">
+          <Cta href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Quote request: ${s.name}`)}`}>Get a quote in 24h</Cta>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <p class="mt-3 max-w-[70ch] text-sm text-muted">{RUNNING_COSTS}</p>
+</section>
+
+<style>
+  .included li { display: flex; gap: 8px; }
+  .included li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 0.5em; border: 2px solid var(--c-accent); border-radius: 1px; }
+</style>

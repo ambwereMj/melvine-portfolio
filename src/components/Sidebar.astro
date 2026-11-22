@@ -1,5 +1,5 @@
 ---
-import { SECTIONS, WHATSAPP_URL, BOOKING_URL, EMAIL, TIMEZONE_LABEL } from "../lib/site";
+import { SECTIONS, WHATSAPP_URL, BOOKING_URL, EMAIL, TIMEZONE_LABEL, sectionHref } from "../lib/site";
 import Cta from "./Cta.astro";
 import PrefToggles from "./PrefToggles.astro";
 import WhatsAppIcon from "./WhatsAppIcon.astro";
@@ -14,7 +14,7 @@ import WhatsAppIcon from "./WhatsAppIcon.astro";
     <ul class="relative">
       {SECTIONS.map((s) => (
         <li>
-          <a href={`#${s.id}`} class="flex min-h-[44px] items-center gap-2 text-muted transition-colors hover:text-text aria-[current=true]:text-text">
+          <a href={sectionHref(s.id, Astro.url.pathname)} class="flex min-h-[44px] items-center gap-2 text-muted transition-colors hover:text-text aria-[current=true]:text-text">
             <span class="pad" aria-hidden="true"></span>
             <span>{s.label}</span>
           </a>

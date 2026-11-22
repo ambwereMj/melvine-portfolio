@@ -1,0 +1,13 @@
+---
+import { getCollection } from "astro:content";
+import WorkCard from "./WorkCard.astro";
+
+const entries = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
+---
+<section id="work" aria-labelledby="work-title" class="scroll-mt-3 border-b border-line py-8 lg:py-12">
+  <h2 id="work-title" class="text-xl">Selected work</h2>
+  <p class="mt-1 max-w-[60ch] text-muted">Three projects I work on alone. Each page says what works today and what is still to come.</p>
+  <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+    {entries.map((entry) => <WorkCard entry={entry} />)}
+  </div>
+</section>

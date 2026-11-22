@@ -1,0 +1,35 @@
+---
+// The page frame shared by the home page and case-study pages: sidebar, mobile header, footer, bottom bar.
+import Base from "./Base.astro";
+import SkipLink from "../components/SkipLink.astro";
+import Sidebar from "../components/Sidebar.astro";
+import MobileHeader from "../components/MobileHeader.astro";
+import BottomBar from "../components/BottomBar.astro";
+import Cta from "../components/Cta.astro";
+import WhatsAppIcon from "../components/WhatsAppIcon.astro";
+import { WHATSAPP_URL, EMAIL } from "../lib/site";
+
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+---
+<Base title={title} description={description}>
+  <SkipLink />
+  <div class="mx-auto grid max-w-[1440px] lg:grid-cols-[minmax(320px,380px)_1fr]">
+    <Sidebar />
+    <div class="min-w-0">
+      <MobileHeader />
+      <main id="main" tabindex="-1" class="px-2 outline-none sm:px-4 lg:px-8">
+        <slot />
+      </main>
+      <footer class="flex flex-col gap-2 px-2 py-8 sm:px-4 lg:px-8">
+        <p class="font-display text-lg font-bold">Have a project in mind?</p>
+        <div class="flex flex-wrap gap-1.5">
+          <Cta href={WHATSAPP_URL} external><WhatsAppIcon />Chat on WhatsApp</Cta>
+          <Cta href={`mailto:${EMAIL}`} variant="secondary">Email me</Cta>
+        </div>
+        <p class="text-sm text-muted">© {new Date().getFullYear()} Melvine Jerry</p>
+      </footer>
+    </div>
+  </div>
+  <BottomBar />
+</Base>

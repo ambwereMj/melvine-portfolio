@@ -1,38 +1,18 @@
 ---
-import Base from "../layouts/Base.astro";
-import SkipLink from "../components/SkipLink.astro";
-import Sidebar from "../components/Sidebar.astro";
-import MobileHeader from "../components/MobileHeader.astro";
-import BottomBar from "../components/BottomBar.astro";
+import SiteShell from "../layouts/SiteShell.astro";
 import Section from "../components/Section.astro";
 import Hero from "../components/Hero.astro";
 import ProofStrip from "../components/ProofStrip.astro";
-import Cta from "../components/Cta.astro";
-import WhatsAppIcon from "../components/WhatsAppIcon.astro";
-import { SECTIONS, WHATSAPP_URL, EMAIL } from "../lib/site";
+import WorkSection from "../components/WorkSection.astro";
+import ServicesSection from "../components/ServicesSection.astro";
+import { SECTIONS } from "../lib/site";
 
-const stageFor: Record<string, number> = { work: 3, services: 3, process: 6, about: 6, lab: 6, contact: 6 };
-const rest = SECTIONS.filter((s) => s.id !== "hero");
+const stageFor: Record<string, number> = { process: 6, about: 6, lab: 6, contact: 6 };
+const placeholders = SECTIONS.filter((s) => !["hero", "work", "services"].includes(s.id));
 ---
-<Base title="Melvine Jerry: AI agents, automations and web apps" description="Melvine Jerry builds WhatsApp AI agents, automations and web apps for businesses in Kenya and worldwide.">
-  <SkipLink />
-  <div class="mx-auto grid max-w-[1440px] lg:grid-cols-[minmax(320px,380px)_1fr]">
-    <Sidebar />
-    <div class="min-w-0">
-      <MobileHeader />
-      <main id="main" tabindex="-1" class="px-2 outline-none sm:px-4 lg:px-8">
-        <Hero><ProofStrip /></Hero>
-        {rest.map((s) => <Section id={s.id} label={s.label} stage={stageFor[s.id]} />)}
-      </main>
-      <footer class="flex flex-col gap-2 px-2 py-8 sm:px-4 lg:px-8">
-        <p class="font-display text-lg font-bold">Have a project in mind?</p>
-        <div class="flex flex-wrap gap-1.5">
-          <Cta href={WHATSAPP_URL} external><WhatsAppIcon />Chat on WhatsApp</Cta>
-          <Cta href={`mailto:${EMAIL}`} variant="secondary">Email me</Cta>
-        </div>
-        <p class="text-sm text-muted">© {new Date().getFullYear()} Melvine Jerry</p>
-      </footer>
-    </div>
-  </div>
-  <BottomBar />
-</Base>
+<SiteShell title="Melvine Jerry: AI agents, automations and web apps" description="Melvine Jerry builds WhatsApp AI agents, automations and web apps for businesses in Kenya and worldwide.">
+  <Hero><ProofStrip /></Hero>
+  <WorkSection />
+  <ServicesSection />
+  {placeholders.map((s) => <Section id={s.id} label={s.label} stage={stageFor[s.id]} />)}
+</SiteShell>

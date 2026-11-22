@@ -1,0 +1,55 @@
+---
+import { DIAGRAMS, CELL, BOX, tracePath, endPads, type DiagramId } from "../lib/diagrams";
+
+interface Props { id: DiagramId }
+const d = DIAGRAMS[Astro.props.id];
+const byId = new Map(d.nodes.map((n) => [n.id, n]));
+const cols = Math.max(...d.nodes.map((n) => n.col)) + 1;
+const rows = Math.max(...d.nodes.map((n) => n.row)) + 1;
+const titleId = `diagram-${Astro.props.id}-title`;
+const edges = d.edges.map(([a, b]) => ({ a: byId.get(a)!, b: byId.get(b)! }));
+---
+<figure class="circuit my-4">
+  <svg
+    role="img"
+    aria-labelledby={titleId}
+    viewBox={`0 0 ${cols * CELL.w} ${rows * CELL.h}`}
+    class="block h-auto w-full max-w-[480px]"
+  >
+    <title id={titleId}>{d.title}</title>
+    <g class="traces" fill="none" stroke-width="3" stroke-linecap="square">
+      {edges.map(({ a, b }) => <path d={tracePath(a, b)} class:list={[(a.planned || b.planned) && "planned"]} />)}
+    </g>
+    {d.nodes.map((n) => {
+      const x = n.col * CELL.w + (CELL.w - BOX.w) / 2;
+      const y = n.row * CELL.h + (CELL.h - BOX.h) / 2;
+      const lines = n.label.split("\n");
+      return (
+        <g class:list={["node", n.planned && "planned"]}>
+          <rect x={x} y={y} width={BOX.w} height={BOX.h} rx="3" />
+          <text x={x + BOX.w / 2} y={y + BOX.h / 2 - (lines.length - 1) * 8} text-anchor="middle" dominant-baseline="middle">
+            {lines.map((line, i) => <tspan x={x + BOX.w / 2} dy={i === 0 ? 0 : 16}>{line}</tspan>)}
+          </text>
+        </g>
+      );
+    })}
+    <g class="pads">
+      {edges.flatMap(({ a, b }) => endPads(a, b).map((p) => <circle cx={p.x} cy={p.y} r="5" />))}
+    </g>
+  </svg>
+  <figcaption class="mt-2 text-sm text-muted">
+    <span class="sr-only">{d.title}: </span>
+    <ol class="list-decimal space-y-0.5 pl-3">
+      {d.steps.map((s) => <li>{s}</li>)}
+    </ol>
+  </figcaption>
+</figure>
+
+<style>
+  .traces path { stroke: var(--c-accent); }
+  .traces path.planned { stroke: var(--c-accent2); stroke-dasharray: 8 6; }
+  .node rect { fill: var(--c-surface); stroke: var(--c-border); stroke-width: 1.5; }
+  .node.planned rect { stroke: var(--c-accent2); stroke-dasharray: 5 4; }
+  .node text { fill: var(--c-text); font-family: var(--font-sans); font-size: 15px; }
+  .pads circle { fill: var(--c-bg); stroke: var(--c-accent); stroke-width: 2.5; }
+</style>

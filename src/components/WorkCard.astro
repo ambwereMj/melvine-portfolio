@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props { entry: CollectionEntry<"work"> }
+const { data, id } = Astro.props.entry;
+const live = data.status === "Live";
+---
+<article class="module relative flex flex-col gap-1.5 rounded-sm border border-border bg-surface p-3 pt-4 transition-colors hover:border-accent focus-within:border-accent">
+  <span class="pins" aria-hidden="true"></span>
+  <div class="flex flex-wrap items-center gap-1 text-sm">
+    <span class="font-semibold">{data.project}</span>
+    <span class:list={["status", live ? "text-accent" : "text-accent2-text"]}>{data.status}</span>
+  </div>
+  <h3 class="text-lg leading-snug">
+    <a href={`/work/${id}`} class="stretched outline-none">{data.title}</a>
+  </h3>
+  <p class="text-muted">{data.summary}</p>
+  {data.stack.length > 0 && (
+    <ul class="mt-auto flex flex-wrap gap-x-2 gap-y-0.5 pt-1 font-mono text-xs text-muted" aria-label="Built with">
+      {data.stack.slice(0, 4).map((s) => <li>{s}</li>)}
+    </ul>
+  )}
+  <span class="text-sm font-semibold text-accent" aria-hidden="true">Read the case study</span>
+</article>
+
+<style>
+  /* Row of header pins along the top edge: the card is a "module" plugged into the board. */
+  .pins {
+    position: absolute;
+    top: -5px;
+    left: 24px;
+    width: 72px;
+    height: 10px;
+    background: radial-gradient(circle, var(--c-border) 3px, transparent 3.5px) 0 0 / 18px 10px repeat-x;
+  }
+  .module:hover .pins, .module:focus-within .pins {
+    background-image: radial-gradient(circle, var(--c-accent) 3px, transparent 3.5px);
+  }
+  .status::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: currentColor; vertical-align: middle; }
+  /* Whole card is clickable; the focus ring goes on the card instead of the inline link. */
+  .stretched::after { content: ""; position: absolute; inset: 0; }
+  .module:has(.stretched:focus-visible) { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+</style>

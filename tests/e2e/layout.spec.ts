@@ -15,7 +15,7 @@ test.describe("desktop shell", () => {
     await expect(page.getByTestId("bottom-bar")).toBeHidden();
     await page.locator("#contact").scrollIntoViewIfNeeded();
     const box = await sidebar.boundingBox();
-    expect(box!.y).toBe(0);
+    expect(Math.abs(box!.y)).toBeLessThan(1); // sub-pixel rounding at the very bottom of the page
   });
 
   test("sidebar nav lists all sections in order", async ({ page }) => {
