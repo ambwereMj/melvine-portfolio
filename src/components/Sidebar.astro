@@ -11,7 +11,9 @@ import WhatsAppIcon from "./WhatsAppIcon.astro";
   </div>
 
   <nav aria-label="Sections" class="signal-nav">
-    <ul class="relative">
+    <div class="trace relative">
+    <span class="signal-fill" aria-hidden="true"></span>
+    <ul>
       {SECTIONS.map((s) => (
         <li>
           <a href={sectionHref(s.id, Astro.url.pathname)} class="flex min-h-[44px] items-center gap-2 text-muted transition-colors hover:text-text aria-[current=true]:text-text">
@@ -21,7 +23,13 @@ import WhatsAppIcon from "./WhatsAppIcon.astro";
         </li>
       ))}
     </ul>
+    </div>
   </nav>
+
+  <button type="button" data-palette-open class="-mt-2 inline-flex min-h-[44px] items-center justify-between gap-2 rounded-sm border border-line px-1.5 text-sm text-muted hover:border-border hover:text-text">
+    <span>Search and jump</span>
+    <kbd data-shortcut class="font-mono text-xs">Ctrl K</kbd>
+  </button>
 
   <div class="flex flex-col gap-1.5">
     <Cta href={WHATSAPP_URL} external><WhatsAppIcon />Chat on WhatsApp</Cta>
@@ -43,7 +51,8 @@ import WhatsAppIcon from "./WhatsAppIcon.astro";
 
 <style>
   /* Nav as a column of solder pads joined by a copper trace. */
-  .signal-nav ul::before {
+  .trace::before,
+  .signal-fill {
     content: "";
     position: absolute;
     left: 7px;
@@ -52,8 +61,24 @@ import WhatsAppIcon from "./WhatsAppIcon.astro";
     width: 2px;
     background: var(--c-line);
   }
+  /* Signal Path: the glowing part of the trace, scaled by src/scripts/signal-path.ts (transform only). */
+  .signal-fill {
+    background: var(--c-accent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--c-accent) 45%, transparent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.12s linear;
+  }
+  :global([data-motion="reduce"]) .signal-fill { transition: none; }
+  a[data-lit="true"] .pad { border-color: var(--c-accent); }
+  a.soldered .pad { animation: solder 0.4s ease-out; }
+  @keyframes solder {
+    from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-accent) 70%, transparent); }
+    to { box-shadow: 0 0 0 10px transparent; }
+  }
   .pad {
     position: relative;
+    z-index: 1;
     flex: none;
     width: 16px;
     height: 16px;

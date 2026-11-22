@@ -1,8 +1,9 @@
+import { activeIndex } from "../lib/reading";
+import { measure } from "./measure";
+
 /**
- * Marks the nav link for the section under the reading line (120px from the top,
- * just below where a jumped-to heading lands)
- * with aria-current="true". At the very bottom of the page the last section wins,
- * since a short final section may never reach the reading line.
+ * Marks the nav link for the section being read with aria-current="true".
+ * Uses the shared reading-line maths (src/lib/reading.ts), the same as the Signal Path.
  */
 export function initNavHighlight(nav: HTMLElement): () => void {
   const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
@@ -15,12 +16,7 @@ export function initNavHighlight(nav: HTMLElement): () => void {
 
   function update() {
     frame = 0;
-    const line = Math.min(120, window.innerHeight * 0.4);
-    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-    let active = sections[0];
-    if (atBottom) active = sections[sections.length - 1];
-    else for (const s of sections) if (s.getBoundingClientRect().top <= line) active = s;
-
+    const active = sections[activeIndex(measure(sections))];
     for (const a of links) {
       if (a.hash === `#${active.id}`) a.setAttribute("aria-current", "true");
       else a.removeAttribute("aria-current");

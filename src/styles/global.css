@@ -67,3 +67,6 @@
 
 /* Time-limited content (e.g. the availability badge) hides once its date passes; set before paint. */
 [data-badge="expired"] [data-expires] { display: none; }
+
+/* Sections receive focus after a palette jump; the scroll itself shows where you are. */
+section[tabindex="-1"]:focus { outline: none; }

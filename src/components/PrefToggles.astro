@@ -15,29 +15,13 @@ const btn = "inline-flex min-h-[44px] min-w-[44px] items-center gap-1 rounded-sm
 </div>
 
 <script>
-  import { THEME_KEY, MOTION_KEY, writeStored } from "../lib/prefs";
-
-  const root = document.documentElement;
-  const pressed = { theme: () => root.dataset.theme === "light", motion: () => root.dataset.motion === "reduce" };
-
-  function sync() {
-    document.querySelectorAll<HTMLButtonElement>("button[data-pref]").forEach((b) => {
-      const key = b.dataset.pref as keyof typeof pressed;
-      b.setAttribute("aria-pressed", String(pressed[key]()));
-    });
-  }
+  import { toggleTheme, toggleMotion, syncPrefButtons } from "../scripts/prefs-actions";
 
   document.addEventListener("click", (e) => {
     const b = (e.target as Element).closest<HTMLButtonElement>("button[data-pref]");
     if (!b) return;
-    if (b.dataset.pref === "theme") {
-      root.dataset.theme = root.dataset.theme === "light" ? "dark" : "light";
-      writeStored(THEME_KEY, root.dataset.theme);
-    } else {
-      root.dataset.motion = root.dataset.motion === "reduce" ? "full" : "reduce";
-      writeStored(MOTION_KEY, root.dataset.motion);
-    }
-    sync();
+    if (b.dataset.pref === "theme") toggleTheme();
+    else toggleMotion();
   });
-  sync();
+  syncPrefButtons();
 </script>

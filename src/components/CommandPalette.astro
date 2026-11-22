@@ -1,0 +1,85 @@
+---
+import { getCollection } from "astro:content";
+import { buildCommands, type CommandGroup } from "../lib/commands";
+import { EMAIL } from "../lib/site";
+import Terminal from "./Terminal.astro";
+
+const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order).map((w) => ({ id: w.id, project: w.data.project }));
+const commands = buildCommands({ pathname: Astro.url.pathname, work });
+const groups = [...new Set(commands.map((c) => c.group))] as CommandGroup[];
+---
+<dialog id="palette" aria-labelledby="palette-title" class="palette">
+  <div class="flex items-center justify-between gap-2 border-b border-line px-2 pt-1.5 pb-1">
+    <h2 id="palette-title" tabindex="-1" class="text-sm font-semibold text-muted outline-none">Menu</h2>
+    <button type="button" data-palette-close class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm text-muted hover:text-text" aria-label="Close menu">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><path d="M3 3l10 10M13 3 3 13" /></svg>
+    </button>
+  </div>
+
+  <div data-view="list">
+    <div class="px-2 pt-1.5">
+      <label for="palette-input" class="sr-only">Search or type a command</label>
+      <input
+        id="palette-input"
+        type="text"
+        role="combobox"
+        aria-controls="palette-list"
+        aria-expanded="true"
+        aria-autocomplete="list"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Search or type a command"
+        class="min-h-[48px] w-full rounded-sm border border-border bg-bg px-1.5 text-base text-text placeholder:text-muted"
+      />
+    </div>
+    <div id="palette-list" role="listbox" aria-label="Commands" class="max-h-[60dvh] overflow-y-auto px-1 py-1.5">
+      {groups.map((g, gi) => (
+        <div role="group" aria-labelledby={`palette-group-${gi}`} data-group={g}>
+          <div id={`palette-group-${gi}`} aria-hidden="true" class="px-1 pt-1.5 pb-0.5 text-xs text-muted">{g}</div>
+          {commands.filter((c) => c.group === g).map((c) => (
+            <div
+              role="option"
+              id={`cmd-${c.id}`}
+              aria-selected="false"
+              data-cmd={c.id}
+              data-href={c.href}
+              data-external={c.external ? "" : undefined}
+              data-action={c.action}
+              data-keywords={c.keywords.join(" ")}
+              class="option flex min-h-[44px] cursor-pointer items-center rounded-sm px-1.5"
+            >{c.label}</div>
+          ))}
+        </div>
+      ))}
+    </div>
+    <p data-empty hidden class="px-2 pb-2 text-sm text-muted">No matches. Try “work” or “contact”.</p>
+  </div>
+
+  <Terminal />
+
+  <p id="palette-status" aria-live="polite" class="sr-only"></p>
+  <input data-copy-fallback type="text" readonly value={EMAIL} aria-label="Email address" class="sr-only" tabindex="-1" />
+</dialog>
+
+<script>
+  import { initPalette } from "../scripts/palette";
+  initPalette();
+</script>
+
+<style>
+  .palette {
+    width: min(560px, calc(100vw - 32px));
+    margin: 10dvh auto auto;
+    padding: 0;
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    background: var(--c-surface);
+    color: var(--c-text);
+  }
+  .palette::backdrop { background: color-mix(in srgb, var(--c-bg) 70%, transparent); }
+  .palette[open] { animation: palette-in 0.15s ease-out; }
+  @keyframes palette-in { from { opacity: 0; transform: translateY(-8px) scale(0.98); } }
+  :global([data-motion="reduce"]) .palette[open] { animation: none; }
+  .option[aria-selected="true"] { background: color-mix(in srgb, var(--c-accent) 16%, transparent); color: var(--c-text); }
+  .option[hidden], [role="group"][hidden] { display: none; }
+</style>

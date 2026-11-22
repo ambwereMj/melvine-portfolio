@@ -1,0 +1,37 @@
+---
+// Phone Signal Path: a 2px glowing trace along the top edge. Hidden until the script runs (no JS → nothing).
+---
+<div data-testid="signal-bar" class="signal-bar fixed inset-x-0 top-0 z-50 h-[2px] lg:hidden" aria-hidden="true" hidden>
+  <span data-bar-fill></span>
+</div>
+
+<script>
+  import { initSignalPath } from "../scripts/signal-path";
+  initSignalPath({
+    nav: document.querySelector<HTMLElement>('nav[aria-label="Sections"]'),
+    bar: document.querySelector<HTMLElement>('[data-testid="signal-bar"]'),
+  });
+</script>
+
+<style>
+  .signal-bar { background: var(--c-line); }
+  .signal-bar[hidden] { display: none; }
+  [data-bar-fill] {
+    position: absolute;
+    inset: 0;
+    background: var(--c-accent);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--c-accent) 50%, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .signal-bar :global([data-tick]) {
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 4px;
+    margin-left: -2px;
+    border-radius: 1px;
+    background: var(--c-border);
+  }
+  .signal-bar :global([data-tick][data-lit="true"]) { background: var(--c-accent); }
+</style>

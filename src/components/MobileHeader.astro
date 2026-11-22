@@ -4,5 +4,10 @@ import { sectionHref } from "../lib/site";
 ---
 <header class="flex items-center justify-between gap-2 border-b border-line px-2 py-1 lg:hidden">
   <a href={sectionHref("hero", Astro.url.pathname)} class="inline-flex min-h-[44px] items-center font-display text-lg font-bold tracking-tight">Melvine Jerry</a>
-  <PrefToggles compact />
+  <div class="flex gap-1">
+    <PrefToggles compact />
+    <button type="button" data-palette-open aria-label="Open menu" class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm border border-border text-muted hover:text-text">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4.5h14M2 9h14M2 13.5h9" /></svg>
+    </button>
+  </div>
 </header>
