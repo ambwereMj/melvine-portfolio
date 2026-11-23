@@ -55,7 +55,7 @@ test.describe("desktop", () => {
     await page.goto("/");
     await page.keyboard.press("Control+k");
     await page.keyboard.press("ArrowUp");
-    const id = await page.getByRole("combobox").getAttribute("aria-activedescendant");
+    const id = await page.getByRole("combobox", { name: "Search or type a command" }).getAttribute("aria-activedescendant");
     await expect(page.locator(`#${id}`)).toHaveText("Open terminal");
   });
 
@@ -63,7 +63,7 @@ test.describe("desktop", () => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.goto("/");
     await page.keyboard.press("Control+k");
-    await page.getByRole("combobox").fill("copy email");
+    await page.getByRole("combobox", { name: "Search or type a command" }).fill("copy email");
     await page.keyboard.press("Enter");
     await expect(page.locator("#palette-status")).toHaveText("Email address copied");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("melvinambwere@gmail.com");
@@ -73,7 +73,7 @@ test.describe("desktop", () => {
     await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/");
     await page.keyboard.press("Control+k");
-    await page.getByRole("combobox").fill("light theme");
+    await page.getByRole("combobox", { name: "Search or type a command" }).fill("light theme");
     await page.keyboard.press("Enter");
     expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe("light");
     await expect(page.getByTestId("sidebar").getByRole("button", { name: "Light theme" })).toHaveAttribute("aria-pressed", "true");

@@ -21,19 +21,30 @@ export function findDrafts(files) {
 /** @param {{ draft: boolean }[]} services */
 export const servicesHaveDrafts = (services) => services.some((s) => s.draft === true);
 
+/** @param {{ aboutDraft: boolean }} profile */
+export const profileHasDraft = (profile) => profile.aboutDraft === true;
+
+/** @param {{ draft: boolean }} process */
+export const processHasDraft = (process) => process.draft === true;
+
 /** Vercel sets VERCEL_ENV=production; Netlify sets CONTEXT=production. */
 export const isProductionBuild = (env) => env.VERCEL_ENV === "production" || env.CONTEXT === "production";
 
 async function run() {
   if (process.argv.includes("--if-production") && !isProductionBuild(process.env)) return;
-  const workDir = "src/content/work";
-  const md = readdirSync(workDir)
-    .filter((n) => n.endsWith(".md"))
-    .map((n) => join(workDir, n).replaceAll("\\", "/"))
-    .map((path) => ({ path, text: readFileSync(path, "utf8") }));
+  const md = ["src/content/work", "src/content/notes"].flatMap((dir) =>
+    readdirSync(dir)
+      .filter((n) => n.endsWith(".md"))
+      .map((n) => join(dir, n).replaceAll("\\", "/"))
+      .map((path) => ({ path, text: readFileSync(path, "utf8") })),
+  );
   const drafts = findDrafts(md);
   const { SERVICES } = await import(pathToFileURL("src/content/services.ts").href);
   if (servicesHaveDrafts(SERVICES)) drafts.unshift("src/content/services.ts");
+  const { PROFILE } = await import(pathToFileURL("src/content/profile.ts").href);
+  if (profileHasDraft(PROFILE)) drafts.unshift("src/content/profile.ts (about)");
+  const { PROCESS } = await import(pathToFileURL("src/content/process.ts").href);
+  if (processHasDraft(PROCESS)) drafts.unshift("src/content/process.ts");
   if (drafts.length) {
     console.error("Production build blocked: these files still have draft content awaiting Melvine's approval:");
     for (const d of drafts) console.error(`  - ${d}`);

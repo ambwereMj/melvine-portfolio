@@ -4,7 +4,7 @@ test.skip(({ isMobile }) => isMobile, "keyboard-driven easter egg; desktop proje
 
 async function openTerminal(page: Page) {
   await page.keyboard.press("Control+k");
-  await page.getByRole("combobox").fill("terminal");
+  await page.getByRole("combobox", { name: "Search or type a command" }).fill("terminal");
   await page.keyboard.press("Enter");
   const input = page.getByRole("textbox", { name: "melvine@portfolio:~$" });
   await expect(input).toBeFocused();

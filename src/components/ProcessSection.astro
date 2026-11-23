@@ -1,0 +1,51 @@
+---
+import { PROCESS } from "../content/process";
+---
+<section id="process" aria-labelledby="process-title" class="scroll-mt-3 border-b border-line py-8 lg:py-12">
+  <h2 id="process-title" class="text-xl">How I work</h2>
+  <ol class="steps mt-4 grid gap-3 lg:grid-cols-4 lg:gap-4">
+    {PROCESS.steps.map((s, i) => (
+      <li class="step relative pl-5 lg:pl-0 lg:pt-5">
+        <span class="step-pad" aria-hidden="true">{i + 1}</span>
+        <h3 class="text-lg">{s.title}</h3>
+        <p class="mt-1 text-muted">{s.detail}</p>
+      </li>
+    ))}
+  </ol>
+  <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-sm" aria-label="Working details">
+    {PROCESS.facts.map((f) => <li class="fact">{f}</li>)}
+  </ul>
+</section>
+
+<style>
+  /* Steps sit on a static copper trace: vertical on phones, horizontal on desktop. */
+  .steps { position: relative; }
+  .steps::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--c-line);
+  }
+  .step-pad {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--c-accent);
+    border-radius: 50%;
+    background: var(--c-bg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--c-text);
+  }
+  @media (width >= 64rem) {
+    .steps::before { left: 12px; right: 12px; top: 11px; bottom: auto; width: auto; height: 2px; }
+  }
+  .fact::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border: 2px solid var(--c-accent); border-radius: 1px; }
+</style>

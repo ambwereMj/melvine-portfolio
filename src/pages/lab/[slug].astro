@@ -1,0 +1,24 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import SiteShell from "../../layouts/SiteShell.astro";
+
+export async function getStaticPaths() {
+  const notes = await getCollection("notes");
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+}
+
+interface Props { note: CollectionEntry<"notes"> }
+const { note } = Astro.props;
+const { Content } = await render(note);
+const fmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+---
+<SiteShell title={`${note.data.title} | Melvine Jerry`} description={note.data.summary}>
+  <article class="py-5 lg:py-12">
+    <a href="/#lab" class="inline-flex min-h-[44px] items-center text-sm text-muted underline decoration-border underline-offset-4 hover:text-text">Back to the Lab</a>
+    <h1 class="mt-2 max-w-[24ch] text-2xl tracking-tight">{note.data.title}</h1>
+    <time datetime={note.data.date.toISOString().slice(0, 10)} class="mt-1 block font-mono text-sm text-muted">{fmt.format(note.data.date)}</time>
+    <div class="prose mt-4 max-w-[65ch]">
+      <Content />
+    </div>
+  </article>
+</SiteShell>

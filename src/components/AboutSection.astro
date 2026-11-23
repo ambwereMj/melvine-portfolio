@@ -1,0 +1,21 @@
+---
+import { PROFILE } from "../content/profile";
+import { GITHUB_URL } from "../lib/site";
+
+const quiet = "inline-flex min-h-[44px] items-center underline decoration-border underline-offset-4 hover:text-text";
+---
+<section id="about" aria-labelledby="about-title" class="scroll-mt-3 border-b border-line py-8 lg:py-12">
+  <h2 id="about-title" class="text-xl">About</h2>
+  <div class:list={["mt-3 grid gap-4", PROFILE.photo && "md:grid-cols-[1fr_240px]"]}>
+    <div class="max-w-[62ch] space-y-2">
+      {PROFILE.about.map((p) => <p data-about>{p}</p>)}
+      <p class="flex flex-wrap items-center gap-x-3 text-sm text-muted">
+        {PROFILE.cvUrl ? <a href={PROFILE.cvUrl} class={quiet} download>Download CV</a> : <span>CV coming soon</span>}
+        <a href={GITHUB_URL} class={quiet} target="_blank" rel="noopener">View GitHub</a>
+      </p>
+    </div>
+    {PROFILE.photo && (
+      <img src={PROFILE.photo} alt="Melvine Jerry" width="240" height="300" loading="lazy" class="h-auto w-full max-w-[240px] rounded-sm border border-line object-cover" />
+    )}
+  </div>
+</section>

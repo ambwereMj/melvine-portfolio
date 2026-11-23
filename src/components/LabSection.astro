@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content";
+import { sortNotes } from "../lib/note-schema";
+
+const notes = sortNotes(await getCollection("notes"));
+const fmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+---
+<section id="lab" aria-labelledby="lab-title" class="scroll-mt-3 border-b border-line py-8 lg:py-12">
+  <h2 id="lab-title" class="text-xl">Lab</h2>
+  <p class="mt-1 max-w-[60ch] text-muted">Build logs and notes on how I work.</p>
+  <ul class="mt-4 max-w-[70ch] divide-y divide-line border-y border-line">
+    {notes.map((n) => (
+      <li class="py-2">
+        <a href={`/lab/${n.id}`} class="inline-flex min-h-[44px] items-center text-lg font-semibold underline decoration-border underline-offset-4 hover:decoration-accent">{n.data.title}</a>
+        <p class="text-muted">{n.data.summary}</p>
+        <time datetime={n.data.date.toISOString().slice(0, 10)} class="mt-0.5 block font-mono text-xs text-muted">{fmt.format(n.data.date)}</time>
+      </li>
+    ))}
+  </ul>
+</section>

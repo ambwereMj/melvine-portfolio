@@ -16,7 +16,7 @@ for (const scheme of ["dark", "light"] as const) {
     await page.emulateMedia({ colorScheme: scheme });
     await page.goto("/");
     await page.keyboard.press("Control+k");
-    await page.getByRole("combobox").fill("terminal");
+    await page.getByRole("combobox", { name: "Search or type a command" }).fill("terminal");
     await page.keyboard.press("Enter");
     const input = page.getByRole("textbox", { name: "melvine@portfolio:~$" });
     await input.fill("projects");

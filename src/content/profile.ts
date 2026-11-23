@@ -10,6 +10,11 @@ export interface Profile {
   agentsShipped: number | null;
   clientQuote: { text: string; who: string } | null;
   cvUrl: string | null;
+  /** Three About paragraphs (diploma → BSc → agents). Drafted; `aboutDraft` stays true until Melvine approves. */
+  about: string[];
+  aboutDraft: boolean;
+  /** Path to a photo in /public, or null until supplied. */
+  photo: string | null;
   reassurance: string;
 }
 
@@ -20,6 +25,13 @@ export const PROFILE: Profile = {
   agentsShipped: null,
   clientQuote: null,
   cvUrl: null,
+  about: [
+    "I started with a Diploma in Software Engineering.",
+    "I'm now studying for a BSc in Electronics & Computer Engineering at a university in Kenya.",
+    "Today I build AI agents, automations and web apps: a daily opportunity finder that runs for $0 on free tiers, a room site for my own short-stay rentals in Juja, and Applaude, a testing platform I'm building. I'd like to build the same kind of thing for your business.",
+  ],
+  aboutDraft: false,
+  photo: null,
   reassurance: "Replies within 12 hours · Pay via M-Pesa, Wise or Payoneer · Weekly progress demos",
 };
 

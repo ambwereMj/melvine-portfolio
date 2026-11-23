@@ -1,18 +1,20 @@
 ---
 import SiteShell from "../layouts/SiteShell.astro";
-import Section from "../components/Section.astro";
 import Hero from "../components/Hero.astro";
 import ProofStrip from "../components/ProofStrip.astro";
 import WorkSection from "../components/WorkSection.astro";
 import ServicesSection from "../components/ServicesSection.astro";
-import { SECTIONS } from "../lib/site";
-
-const stageFor: Record<string, number> = { process: 6, about: 6, lab: 6, contact: 6 };
-const placeholders = SECTIONS.filter((s) => !["hero", "work", "services"].includes(s.id));
+import ProcessSection from "../components/ProcessSection.astro";
+import AboutSection from "../components/AboutSection.astro";
+import LabSection from "../components/LabSection.astro";
+import ContactSection from "../components/ContactSection.astro";
 ---
 <SiteShell title="Melvine Jerry: AI agents, automations and web apps" description="Melvine Jerry builds WhatsApp AI agents, automations and web apps for businesses in Kenya and worldwide.">
   <Hero><ProofStrip /></Hero>
   <WorkSection />
   <ServicesSection />
-  {placeholders.map((s) => <Section id={s.id} label={s.label} stage={stageFor[s.id]} />)}
+  <ProcessSection />
+  <AboutSection />
+  <LabSection />
+  <ContactSection />
 </SiteShell>

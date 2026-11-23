@@ -26,3 +26,12 @@ it("detects production builds on Vercel and Netlify", () => {
   expect(isProductionBuild({ VERCEL_ENV: "preview" })).toBe(false);
   expect(isProductionBuild({})).toBe(false);
 });
+
+// @ts-expect-error plain JS module
+import { profileHasDraft, processHasDraft } from "../../scripts/check-drafts.mjs";
+it("profile and process drafts are detected from data", () => {
+  expect(profileHasDraft({ aboutDraft: true })).toBe(true);
+  expect(profileHasDraft({ aboutDraft: false })).toBe(false);
+  expect(processHasDraft({ draft: true })).toBe(true);
+  expect(processHasDraft({ draft: false })).toBe(false);
+});

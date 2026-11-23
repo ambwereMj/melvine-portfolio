@@ -9,8 +9,11 @@ export const SECTIONS = [
 ] as const;
 
 const whatsappMessage = (need: string) => `Hi Melvine, I saw your portfolio. I need: ${need} · Budget: ___ · Deadline: ___`;
+export const WHATSAPP_NUMBER = "254110753069";
+/** wa.me link that opens a chat with `text` already typed. */
+export const whatsappUrlWithText = (text: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 /** WhatsApp link with the standard pre-filled message; `need` fills the "I need:" blank. */
-export const whatsappUrlFor = (need: string) => `https://wa.me/254110753069?text=${encodeURIComponent(whatsappMessage(need))}`;
+export const whatsappUrlFor = (need: string) => whatsappUrlWithText(whatsappMessage(need));
 export const WHATSAPP_MESSAGE = whatsappMessage("___");
 export const WHATSAPP_URL = whatsappUrlFor("___");
 export const EMAIL = "melvinambwere@gmail.com";
@@ -22,3 +25,6 @@ export const GITHUB_URL = "https://github.com/ambwereMj";
 
 /** In-page anchor on the home page; absolute "/#id" everywhere else (e.g. case-study pages). */
 export const sectionHref = (id: string, pathname: string) => (pathname === "/" ? `#${id}` : `/#${id}`);
+
+/** Web3Forms access key (public by design; tied to Melvine's email). null = form falls back to WhatsApp. */
+export const WEB3FORMS_KEY: string | null = null;

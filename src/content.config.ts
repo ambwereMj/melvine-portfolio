@@ -1,10 +1,16 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { workSchema } from "./lib/work-schema";
+import { noteSchema } from "./lib/note-schema";
 
 const work = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/work" }),
   schema: workSchema,
 });
 
-export const collections = { work };
+const notes = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/notes" }),
+  schema: noteSchema,
+});
+
+export const collections = { work, notes };

@@ -70,3 +70,8 @@
 
 /* Sections receive focus after a palette jump; the scroll itself shows where you are. */
 section[tabindex="-1"]:focus { outline: none; }
+
+/* Long-form text on case-study and Lab pages. */
+.prose h2 { margin-top: 32px; font-size: var(--text-lg); line-height: var(--text-lg--line-height); }
+.prose p { margin-top: 16px; }
+.prose strong { color: var(--c-text); }

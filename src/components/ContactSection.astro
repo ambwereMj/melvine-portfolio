@@ -1,0 +1,81 @@
+---
+import AudienceCtas from "./AudienceCtas.astro";
+import { SERVICES } from "../content/services";
+import { budgetOptions, formAttributes } from "../lib/contact";
+import { WHATSAPP_URL, BOOKING_URL, EMAIL, TIMEZONE_LABEL, WEB3FORMS_KEY } from "../lib/site";
+
+const whatsapp = { label: "Chat on WhatsApp", href: WHATSAPP_URL, external: true, whatsapp: true };
+const booking = { label: "Book a 15-min call", href: BOOKING_URL };
+const budgets = { local: budgetOptions("local", SERVICES), international: budgetOptions("international", SERVICES) };
+const live = WEB3FORMS_KEY !== null;
+const attrs = formAttributes(WEB3FORMS_KEY, Astro.site?.href);
+const field = "min-h-[48px] w-full rounded-sm border border-border bg-bg px-1.5 text-base text-text";
+const label = "block text-sm font-semibold";
+const error = "mt-0.5 text-sm text-accent2-text empty:hidden";
+---
+<section id="contact" aria-labelledby="contact-title" class="scroll-mt-3 py-8 lg:py-12">
+  <h2 id="contact-title" class="text-xl">Contact</h2>
+  <div class="mt-3 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+    <div>
+      <p class="max-w-[48ch] text-muted">Tell me what you need. I reply within 12 hours, working in {TIMEZONE_LABEL}.</p>
+      <AudienceCtas class="mt-3" local={[whatsapp, booking]} international={[booking, whatsapp]} />
+      <a href={`mailto:${EMAIL}`} class="mt-2 inline-flex min-h-[44px] items-center text-sm text-muted underline decoration-border underline-offset-4 hover:text-text">{EMAIL}</a>
+    </div>
+
+    <form
+      id="contact-form"
+      hidden={attrs.hidden}
+      class="grid gap-2"
+      data-key={live ? WEB3FORMS_KEY : undefined}
+      action={attrs.action}
+      method={attrs.method}
+    >
+      {live && (
+        <>
+          <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+          <input type="hidden" name="subject" value="New portfolio enquiry" />
+          <input type="hidden" name="redirect" value={attrs.redirect} />
+        </>
+      )}
+      <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <div>
+        <label for="cf-name" class={label}>Your name</label>
+        <input id="cf-name" name="name" required autocomplete="name" class={field} aria-describedby="cf-name-error" />
+        <p id="cf-name-error" class={error}></p>
+      </div>
+      <div>
+        <label for="cf-contact" class={label}>WhatsApp number or email</label>
+        <input id="cf-contact" name="contact" required class={field} aria-describedby="cf-contact-error" />
+        <p id="cf-contact-error" class={error}></p>
+      </div>
+      <div>
+        <label for="cf-message" class={label}>What do you need?</label>
+        <textarea id="cf-message" name="message" required rows="4" class={`${field} py-1`} aria-describedby="cf-message-error"></textarea>
+        <p id="cf-message-error" class={error}></p>
+      </div>
+      <div data-for="local">
+        <label for="cf-budget-kes" class={label}>Budget (optional)</label>
+        <select id="cf-budget-kes" name="budget_kes" class={field}>
+          {budgets.local.map((b, i) => <option value={i === 0 ? "" : b}>{b}</option>)}
+        </select>
+      </div>
+      <div data-for="international">
+        <label for="cf-budget-usd" class={label}>Budget (optional)</label>
+        <select id="cf-budget-usd" name="budget_usd" class={field}>
+          {budgets.international.map((b, i) => <option value={i === 0 ? "" : b}>{b}</option>)}
+        </select>
+      </div>
+
+      <button type="submit" class="mt-1 inline-flex min-h-[48px] items-center justify-center rounded-sm bg-accent px-3 font-semibold text-on-accent hover:brightness-110 disabled:opacity-60">Send</button>
+      <p id="contact-status" role="status" class="text-sm"></p>
+      <p class="text-sm text-muted">I only use these details to reply to you.</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { initContactForm } from "../scripts/contact-form";
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  if (form) initContactForm(form);
+</script>
