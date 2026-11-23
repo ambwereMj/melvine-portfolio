@@ -36,5 +36,5 @@ export const MPESA_PAYMENT: import("./mpesa").MpesaPayment | null = null;
 export const SITE_URL = "https://melvine-jerry.vercel.app";
 
 /** Umami Cloud website ID (from Melvine's Umami account). null = no analytics script at all. */
-export const UMAMI_WEBSITE_ID: string | null = null;
+export const UMAMI_WEBSITE_ID: string | null = "0511f619-e87b-4104-ac1f-55353b79fff7";
 export const UMAMI_SCRIPT_URL = "https://cloud.umami.is/script.js";

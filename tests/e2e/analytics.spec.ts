@@ -1,4 +1,5 @@
 import { test, expect, type Page, type Browser } from "@playwright/test";
+import { UMAMI_WEBSITE_ID } from "../../src/lib/site";
 
 async function open(browser: Browser, isMobile: boolean, tz = "Africa/Nairobi") {
   const ctx = await browser.newContext({ timezoneId: tz, isMobile, hasTouch: isMobile, viewport: isMobile ? { width: 375, height: 812 } : { width: 1440, height: 900 } });
@@ -9,6 +10,7 @@ async function open(browser: Browser, isMobile: boolean, tz = "Africa/Nairobi") 
     window.open = (() => null) as typeof window.open;
   });
   await page.route(/wa\.me|api\.web3forms/, (r) => r.fulfill({ status: 204, body: "" }));
+  await page.route("https://cloud.umami.is/**", (r) => r.abort()); // the stub above records events
   await page.goto("/");
   // keep mailto/wa.me clicks from navigating away
   await page.evaluate(() => document.addEventListener("click", (e) => { const a = (e.target as Element).closest("a"); if (a && /^(mailto:|https:\/\/wa\.me)/.test(a.href)) e.preventDefault(); }));
@@ -67,9 +69,15 @@ test("palette WhatsApp command is counted with location palette", async ({ brows
   await ctx.close();
 });
 
-test("no Umami script while the website ID is not set", async ({ page }) => {
+test("Umami script is present with the site's ID, domain and do-not-track", async ({ page }) => {
+  await page.route("https://cloud.umami.is/**", (r) => r.abort());
   await page.goto("/");
-  await expect(page.locator('script[src*="umami"]')).toHaveCount(0);
+  const s = page.locator('script[src="https://cloud.umami.is/script.js"]');
+  await expect(s).toHaveCount(1);
+  await expect(s).toHaveAttribute("data-website-id", UMAMI_WEBSITE_ID ?? "missing");
+  await expect(s).toHaveAttribute("data-domains", "melvine-jerry.vercel.app");
+  await expect(s).toHaveAttribute("data-do-not-track", "true");
+  await expect(s).toHaveAttribute("defer", "");
 });
 
 test("clicks still work without Umami", async ({ page }) => {
