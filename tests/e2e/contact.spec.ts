@@ -1,4 +1,5 @@
 import { test, expect, type Page, type Browser } from "@playwright/test";
+import { WEB3FORMS_KEY } from "../../src/lib/site";
 
 const form = (page: Page) => page.locator("form#contact-form");
 
@@ -46,6 +47,8 @@ test("empty submit shows linked, announced errors and focuses the first field", 
 
 test("without a Web3Forms key, Send opens WhatsApp with everything typed", async ({ browser, isMobile }) => {
   const { ctx, page } = await open(browser, { timezoneId: "Africa/Nairobi" }, isMobile);
+  // Exercise the keyless fallback path even though the live build has a key.
+  await page.evaluate(() => { delete (document.querySelector("#contact-form") as HTMLFormElement).dataset.key; });
   await fill(page);
   await form(page).locator('select[name="budget_kes"]').selectOption("KES 20,000–50,000");
   await form(page).getByRole("button", { name: "Send" }).click();
@@ -125,11 +128,19 @@ test.describe("with a Web3Forms key (mocked API)", () => {
   });
 });
 
-test("without JavaScript the form is hidden and direct links remain", async ({ browser }) => {
+test("with the live key, the form posts straight to Web3Forms (works without JavaScript)", async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });
   const page = await ctx.newPage();
   await page.goto("/");
-  await expect(form(page)).toBeHidden();
+  const f = form(page);
+  await expect(f).toBeVisible();
+  await expect(f).toHaveAttribute("action", "https://api.web3forms.com/submit");
+  await expect(f).toHaveAttribute("method", "post");
+  await expect(f.locator('input[name="access_key"]')).toHaveValue(WEB3FORMS_KEY ?? "missing");
+  await expect(f.locator('input[name="subject"]')).toHaveValue("New portfolio enquiry");
+  await expect(f.locator('input[name="redirect"]')).toHaveValue("https://melvine-jerry.vercel.app/thanks");
+  await expect(f.locator('input[name="botcheck"]')).toHaveCount(1);
+  await expect(page.getByLabel("Your name")).toHaveAttribute("required", "");
   await expect(page.locator("#contact").getByRole("link", { name: "Chat on WhatsApp" })).toBeVisible();
   await ctx.close();
 });

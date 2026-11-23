@@ -27,7 +27,7 @@ export const GITHUB_URL = "https://github.com/ambwereMj";
 export const sectionHref = (id: string, pathname: string) => (pathname === "/" ? `#${id}` : `/#${id}`);
 
 /** Web3Forms access key (public by design; tied to Melvine's email). null = form falls back to WhatsApp. */
-export const WEB3FORMS_KEY: string | null = null;
+export const WEB3FORMS_KEY: string | null = "7d8e6d1b-35e3-451a-8779-0730b2b7e547";
 
 /** M-Pesa payment details shown after "agree a quote" in How I work and Contact. null = nothing shown. */
 export const MPESA_PAYMENT: import("./mpesa").MpesaPayment | null = null;

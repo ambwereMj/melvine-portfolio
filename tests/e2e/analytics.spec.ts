@@ -49,8 +49,22 @@ test("service quote click carries the service name", async ({ browser, isMobile 
   await ctx.close();
 });
 
+test("a successful Web3Forms send is counted", async ({ browser, isMobile }) => {
+  const { ctx, page } = await open(browser, isMobile);
+  await page.unroute(/wa\.me|api\.web3forms/);
+  await page.route("https://api.web3forms.com/submit", (r) => r.fulfill({ status: 200, contentType: "application/json", body: '{"success":true}' }));
+  await page.getByLabel("Your name").fill("A");
+  await page.getByLabel("WhatsApp number or email").fill("a@b.co");
+  await page.getByLabel("What do you need?").fill("x");
+  await page.getByRole("button", { name: "Send" }).click();
+  await expect(page.locator("#contact-status")).toHaveText("Thanks, I'll reply within 12 hours.");
+  expect(await events(page)).toContainEqual({ name: "contact-send", data: { method: "web3forms", location: "contact" } });
+  await ctx.close();
+});
+
 test("contact form WhatsApp fallback counts a send", async ({ browser, isMobile }) => {
   const { ctx, page } = await open(browser, isMobile);
+  await page.evaluate(() => { delete (document.querySelector("#contact-form") as HTMLFormElement).dataset.key; });
   await page.getByLabel("Your name").fill("A");
   await page.getByLabel("WhatsApp number or email").fill("a@b.co");
   await page.getByLabel("What do you need?").fill("x");
