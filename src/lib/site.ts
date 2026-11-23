@@ -32,8 +32,8 @@ export const WEB3FORMS_KEY: string | null = null;
 /** M-Pesa payment details shown after "agree a quote" in How I work and Contact. null = nothing shown. */
 export const MPESA_PAYMENT: import("./mpesa").MpesaPayment | null = null;
 
-/** The site's public address. Placeholder until the Vercel project exists (Stage 7, Task 6), then a custom domain later. */
-export const SITE_URL = "https://example.com";
+/** The site's public address (free Vercel address; switch to a custom domain later: change this line and add the domain in Vercel). */
+export const SITE_URL = "https://melvine-jerry.vercel.app";
 
 /** Umami Cloud website ID (from Melvine's Umami account). null = no analytics script at all. */
 export const UMAMI_WEBSITE_ID: string | null = null;
