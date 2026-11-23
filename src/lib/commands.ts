@@ -11,6 +11,8 @@ export interface Command {
   href?: string;
   external?: boolean;
   action?: CommandAction;
+  /** Analytics event sent when the command runs (location "palette"). */
+  event?: string;
 }
 
 const SECTION_KEYWORDS: Record<string, string[]> = {
@@ -30,11 +32,11 @@ export function buildCommands({ pathname, work }: { pathname: string; work: { id
       id: `go-${s.id}`, group: "Go to", label: s.label, keywords: SECTION_KEYWORDS[s.id] ?? [], href: sectionHref(s.id, pathname),
     })),
     ...work.map((w): Command => ({
-      id: `case-${w.id}`, group: "Case studies", label: w.project, keywords: ["work", "case study", "project"], href: `/work/${w.id}`,
+      id: `case-${w.id}`, group: "Case studies", label: w.project, keywords: ["work", "case study", "project"], href: `/work/${w.id}/`,
     })),
-    { id: "whatsapp", group: "Contact", label: "Chat on WhatsApp", keywords: ["wa", "message", "hire", "chat"], href: WHATSAPP_URL, external: true },
-    { id: "book", group: "Contact", label: "Book a 15-min call", keywords: ["call", "meeting", "schedule", "booking"], href: BOOKING_URL },
-    { id: "email", group: "Contact", label: "Email me", keywords: ["mail", "contact"], href: `mailto:${EMAIL}` },
+    { id: "whatsapp", group: "Contact", label: "Chat on WhatsApp", keywords: ["wa", "message", "hire", "chat"], href: WHATSAPP_URL, external: true, event: "whatsapp-click" },
+    { id: "book", group: "Contact", label: "Book a 15-min call", keywords: ["call", "meeting", "schedule", "booking"], href: BOOKING_URL, event: "booking-click" },
+    { id: "email", group: "Contact", label: "Email me", keywords: ["mail", "contact"], href: `mailto:${EMAIL}`, event: "email-click" },
     { id: "copy-email", group: "Contact", label: "Copy email address", keywords: ["mail", "clipboard"], action: "copy-email" },
     { id: "theme", group: "Display", label: "Switch to light theme", keywords: ["light", "dark", "theme", "colour", "color", "mode"], action: "toggle-theme" },
     { id: "motion", group: "Display", label: "Turn reduce motion on", keywords: ["animation", "motion", "accessibility"], action: "toggle-motion" },

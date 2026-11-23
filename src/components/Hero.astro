@@ -15,19 +15,19 @@ const quiet = "inline-flex min-h-[44px] items-center underline decoration-border
   <p class="mt-2 max-w-[52ch] text-lg text-muted">{PROFILE.subline}</p>
 
   <div class="mt-4 grid gap-1.5 sm:flex sm:flex-wrap" data-for="local">
-    <Cta href={WHATSAPP_URL} external><WhatsAppIcon />Chat on WhatsApp</Cta>
+    <Cta href={WHATSAPP_URL} external event="whatsapp-click" location="hero"><WhatsAppIcon />Chat on WhatsApp</Cta>
     <Cta href="#work" variant="secondary">See my work</Cta>
   </div>
   <div class="mt-4 grid gap-1.5 sm:flex sm:flex-wrap" data-for="international">
-    <Cta href={BOOKING_URL}>Book a 15-min call</Cta>
-    <Cta href={`mailto:${EMAIL}`} variant="secondary">Email me</Cta>
+    <Cta href={BOOKING_URL} event="booking-click" location="hero">Book a 15-min call</Cta>
+    <Cta href={`mailto:${EMAIL}`} variant="secondary" event="email-click" location="hero">Email me</Cta>
   </div>
 
   <p data-testid="reassurance" class="mt-2 max-w-[80ch] text-sm text-pretty text-muted">{PROFILE.reassurance}</p>
 
   <p data-testid="recruiter" class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-muted">
     <span>Hiring?</span>
-    {PROFILE.cvUrl ? <a href={PROFILE.cvUrl} class={quiet} download>Download CV</a> : <span>CV coming soon</span>}
+    {PROFILE.cvUrl ? <a href={PROFILE.cvUrl} class={quiet} download data-event="cv-download" data-event-location="hero">Download CV</a> : <span>CV coming soon</span>}
     <a href={GITHUB_URL} class={quiet} target="_blank" rel="noopener">View GitHub</a>
   </p>
 

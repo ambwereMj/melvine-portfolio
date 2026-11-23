@@ -8,8 +8,9 @@ import ProcessSection from "../components/ProcessSection.astro";
 import AboutSection from "../components/AboutSection.astro";
 import LabSection from "../components/LabSection.astro";
 import ContactSection from "../components/ContactSection.astro";
+import { personJsonLd } from "../lib/seo";
 ---
-<SiteShell title="Melvine Jerry: AI agents, automations and web apps" description="Melvine Jerry builds WhatsApp AI agents, automations and web apps for businesses in Kenya and worldwide.">
+<SiteShell title="Melvine Jerry: AI agents, automations and web apps" description="Melvine Jerry builds WhatsApp AI agents, automations and web apps for businesses in Kenya and worldwide." jsonLd={personJsonLd()}>
   <Hero><ProofStrip /></Hero>
   <WorkSection />
   <ServicesSection />

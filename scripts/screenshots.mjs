@@ -18,6 +18,7 @@ for (const { w, scheme, tz, name } of shots) {
   await page.goto("http://127.0.0.1:4321/");
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({ path: `${out}/${name}.png` });
+  await page.screenshot({ path: `${out}/${name}-full.png`, fullPage: true });
   await ctx.close();
 }
 await browser.close();

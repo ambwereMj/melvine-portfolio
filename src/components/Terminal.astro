@@ -13,7 +13,7 @@ const data: TerminalData = {
   oneLiner: "I build AI agents, automations and web apps.",
   proof: proofItems(PROFILE),
   timezone: TIMEZONE_LABEL,
-  work: work.map((w) => ({ project: w.data.project, status: w.data.status, href: `/work/${w.id}` })),
+  work: work.map((w) => ({ project: w.data.project, status: w.data.status, href: `/work/${w.id}/` })),
   services: SERVICES.map((s) => ({ name: s.name, local: formatPrice(s.price.local), international: formatPrice(s.price.international) })),
   whatsapp: WHATSAPP_URL,
   email: EMAIL,
@@ -29,7 +29,7 @@ const data: TerminalData = {
       class="min-h-[44px] w-full bg-transparent text-text outline-none" />
   </form>
 </div>
-<script type="application/json" id="terminal-data" set:html={JSON.stringify(data)}></script>
+<script type="application/json" id="terminal-data" set:html={JSON.stringify(data).replace(/</g, "\\u003c")}></script>
 
 <script>
   import { initTerminal } from "../scripts/terminal";

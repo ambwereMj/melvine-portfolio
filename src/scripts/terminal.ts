@@ -35,6 +35,8 @@ export function initTerminal(): void {
           a.textContent = seg.text;
           a.className = "text-accent underline underline-offset-2";
           if (/^https?:/.test(seg.href)) { a.target = "_blank"; a.rel = "noopener"; }
+          const ev = seg.href === data.booking ? "booking-click" : seg.href.startsWith("https://wa.me/") ? "whatsapp-click" : seg.href.startsWith("mailto:") ? "email-click" : null;
+          if (ev) { a.dataset.event = ev; a.dataset.eventLocation = "terminal"; }
           p.append(a);
         } else p.append(seg.text);
       }

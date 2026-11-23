@@ -15,9 +15,9 @@ const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
 const live = data.status === "Live";
-const whatsapp = { label: "Chat on WhatsApp", href: WHATSAPP_URL, external: true, whatsapp: true };
+const whatsapp = { label: "Chat on WhatsApp", href: WHATSAPP_URL, external: true, whatsapp: true, event: "whatsapp-click", location: "case-study" };
 ---
-<SiteShell title={`${data.project} case study | Melvine Jerry`} description={data.summary}>
+<SiteShell title={`${data.project} case study | Melvine Jerry`} description={data.summary} og={entry.id} ogType="article">
   <article class="py-5 lg:py-12">
     <a href="/#work" class="inline-flex min-h-[44px] items-center text-sm text-muted underline decoration-border underline-offset-4 hover:text-text">Back to all work</a>
 
@@ -66,8 +66,8 @@ const whatsapp = { label: "Chat on WhatsApp", href: WHATSAPP_URL, external: true
       <h2 id="cta-title" class="text-xl">Want one for your business?</h2>
       <AudienceCtas
         class="mt-2"
-        local={[whatsapp, { label: "Email me", href: `mailto:${EMAIL}` }]}
-        international={[{ label: "Book a 15-min call", href: BOOKING_URL }, whatsapp]}
+        local={[whatsapp, { label: "Email me", href: `mailto:${EMAIL}`, event: "email-click", location: "case-study" }]}
+        international={[{ label: "Book a 15-min call", href: BOOKING_URL, event: "booking-click", location: "case-study" }, whatsapp]}
       />
     </section>
   </article>

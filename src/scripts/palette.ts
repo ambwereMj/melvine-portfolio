@@ -1,4 +1,5 @@
 import { toggleTheme, toggleMotion, isLight, isReduced } from "./prefs-actions";
+import { track } from "../lib/analytics";
 
 /**
  * Command palette behaviour (WAI-ARIA combobox + listbox inside a native <dialog>).
@@ -67,6 +68,7 @@ export function initPalette(): void {
     opener = trigger ?? (document.activeElement as HTMLElement | null);
     input.value = "";
     status.textContent = "";
+    dialog!.querySelector("[data-copy-fallback]")?.classList.add("sr-only");
     refreshLabels();
     filter();
     dialog!.showModal();
@@ -104,7 +106,8 @@ export function initPalette(): void {
 
   function run(el: HTMLElement | undefined) {
     if (!el) return;
-    const { href, action } = el.dataset;
+    const { href, action, paletteEvent } = el.dataset;
+    if (paletteEvent) track(paletteEvent, { location: "palette" });
     if (href) {
       if (href.startsWith("#")) return jumpTo(href);
       close();

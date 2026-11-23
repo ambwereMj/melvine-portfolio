@@ -4,8 +4,8 @@ import Cta from "./Cta.astro";
 import WhatsAppIcon from "./WhatsAppIcon.astro";
 ---
 <nav aria-label="Quick contact" data-testid="bottom-bar" class="bottom-bar sticky bottom-0 z-40 grid grid-cols-2 gap-1 border-t border-line bg-bg px-2 pt-1 lg:hidden">
-  <Cta href={WHATSAPP_URL} external><WhatsAppIcon />WhatsApp</Cta>
-  <Cta href={BOOKING_URL} variant="secondary">Book call</Cta>
+  <Cta href={WHATSAPP_URL} external event="whatsapp-click" location="bottom-bar"><WhatsAppIcon />WhatsApp</Cta>
+  <Cta href={BOOKING_URL} variant="secondary" event="booking-click" location="bottom-bar">Book call</Cta>
 </nav>
 
 <style>

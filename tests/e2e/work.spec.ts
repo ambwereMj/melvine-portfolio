@@ -30,7 +30,7 @@ test("home #work shows three cards in order, each linking to its page", async ({
   await expect(cards.locator("h3")).toHaveText(SLUGS.map((s) => fm(s).title));
   for (const [i, slug] of SLUGS.entries()) {
     await expect(cards.nth(i)).toContainText(fm(slug).status);
-    await expect(cards.nth(i).locator(`a[href="/work/${slug}"]`)).toHaveCount(1);
+    await expect(cards.nth(i).locator(`a[href="/work/${slug}/"]`)).toHaveCount(1);
   }
 });
 
@@ -41,7 +41,7 @@ test("clicking a card's body opens its case study", async ({ page }) => {
   await summary.scrollIntoViewIfNeeded();
   const box = (await summary.boundingBox())!;
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-  await expect(page).toHaveURL(/\/work\/opportunity-finder$/);
+  await expect(page).toHaveURL(/\/work\/opportunity-finder\/$/);
 });
 
 for (const slug of SLUGS) {

@@ -1,0 +1,31 @@
+---
+import { MPESA_PAYMENT } from "../lib/site";
+import { mpesaLines } from "../lib/mpesa";
+
+interface Props { class?: string }
+const lines = MPESA_PAYMENT ? mpesaLines(MPESA_PAYMENT) : null;
+---
+{lines && MPESA_PAYMENT && (
+  <div data-mpesa class:list={["max-w-[48ch] rounded-sm border border-line p-2 text-sm", Astro.props.class]}>
+    <p class="font-semibold">After we agree a quote, pay by M-Pesa:</p>
+    <dl class="mt-1 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5">
+      {lines.map((l) => (<><dt class="text-muted">{l.label}</dt><dd class="font-mono">{l.value}</dd></>))}
+    </dl>
+    <button type="button" data-copy={MPESA_PAYMENT.number} class="mt-1 inline-flex min-h-[44px] items-center rounded-sm border border-border px-1.5 text-sm hover:border-accent">Copy number</button>
+    <span data-copy-status role="status" class="ml-1 text-muted"></span>
+  </div>
+)}
+
+<script>
+  document.addEventListener("click", async (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>("[data-copy]");
+    if (!btn) return;
+    const status = btn.parentElement?.querySelector("[data-copy-status]");
+    try {
+      await navigator.clipboard.writeText(btn.dataset.copy!);
+      if (status) status.textContent = "Copied";
+    } catch {
+      if (status) status.textContent = btn.dataset.copy!;
+    }
+  });
+</script>

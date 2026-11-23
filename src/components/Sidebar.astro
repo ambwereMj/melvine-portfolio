@@ -32,9 +32,9 @@ import WhatsAppIcon from "./WhatsAppIcon.astro";
   </button>
 
   <div class="flex flex-col gap-1.5">
-    <Cta href={WHATSAPP_URL} external><WhatsAppIcon />Chat on WhatsApp</Cta>
-    <Cta href={BOOKING_URL} variant="secondary">Book a 15-min call</Cta>
-    <a href={`mailto:${EMAIL}`} class="inline-flex min-h-[44px] items-center text-sm text-muted underline decoration-border underline-offset-4 hover:text-text">{EMAIL}</a>
+    <Cta href={WHATSAPP_URL} external event="whatsapp-click" location="sidebar"><WhatsAppIcon />Chat on WhatsApp</Cta>
+    <Cta href={BOOKING_URL} variant="secondary" event="booking-click" location="sidebar">Book a 15-min call</Cta>
+    <a href={`mailto:${EMAIL}`} data-event="email-click" data-event-location="sidebar" class="inline-flex min-h-[44px] items-center text-sm text-muted underline decoration-border underline-offset-4 hover:text-text">{EMAIL}</a>
   </div>
 
   <div class="mt-auto flex flex-col gap-1.5 pt-2">

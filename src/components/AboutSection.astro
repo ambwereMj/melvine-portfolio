@@ -10,7 +10,7 @@ const quiet = "inline-flex min-h-[44px] items-center underline decoration-border
     <div class="max-w-[62ch] space-y-2">
       {PROFILE.about.map((p) => <p data-about>{p}</p>)}
       <p class="flex flex-wrap items-center gap-x-3 text-sm text-muted">
-        {PROFILE.cvUrl ? <a href={PROFILE.cvUrl} class={quiet} download>Download CV</a> : <span>CV coming soon</span>}
+        {PROFILE.cvUrl ? <a href={PROFILE.cvUrl} class={quiet} download data-event="cv-download" data-event-location="about">Download CV</a> : <span>CV coming soon</span>}
         <a href={GITHUB_URL} class={quiet} target="_blank" rel="noopener">View GitHub</a>
       </p>
     </div>

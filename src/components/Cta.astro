@@ -1,12 +1,12 @@
 ---
-interface Props { href: string; variant?: "primary" | "secondary"; external?: boolean; class?: string }
-const { href, variant = "primary", external = false, class: extra = "" } = Astro.props;
+interface Props { href: string; variant?: "primary" | "secondary"; external?: boolean; class?: string; event?: string; location?: string; service?: string }
+const { href, variant = "primary", external = false, class: extra = "", event, location, service } = Astro.props;
 const base = "inline-flex min-h-[48px] items-center justify-center gap-1 rounded-sm px-2.5 font-semibold transition-colors";
 const styles = {
   primary: "bg-accent text-on-accent hover:brightness-110",
   secondary: "border border-border text-text hover:border-accent hover:text-accent",
 };
 ---
-<a href={href} class:list={[base, styles[variant], extra]} {...(external ? { target: "_blank", rel: "noopener" } : {})}>
+<a href={href} class:list={[base, styles[variant], extra]} {...(external ? { target: "_blank", rel: "noopener" } : {})} data-event={event} data-event-location={event && location} data-event-service={event && service}>
   <slot />
 </a>

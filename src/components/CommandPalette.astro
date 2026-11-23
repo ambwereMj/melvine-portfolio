@@ -45,6 +45,7 @@ const groups = [...new Set(commands.map((c) => c.group))] as CommandGroup[];
               data-href={c.href}
               data-external={c.external ? "" : undefined}
               data-action={c.action}
+              data-palette-event={c.event}
               data-keywords={c.keywords.join(" ")}
               class="option flex min-h-[44px] cursor-pointer items-center rounded-sm px-1.5"
             >{c.label}</div>

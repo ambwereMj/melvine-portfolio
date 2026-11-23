@@ -10,7 +10,7 @@ test("#lab lists both notes with date and summary", async ({ page }) => {
   const items = page.locator("#lab li");
   await expect(items).toHaveCount(2);
   for (const slug of SLUGS) {
-    const item = page.locator(`#lab li:has(a[href="/lab/${slug}"])`);
+    const item = page.locator(`#lab li:has(a[href="/lab/${slug}/"])`);
     await expect(item).toContainText(fm(slug).title);
     await expect(item).toContainText(fm(slug).summary);
     await expect(item.locator("time")).toHaveAttribute("datetime", /^\d{4}-\d{2}-\d{2}/);

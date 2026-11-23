@@ -25,10 +25,10 @@ import Cta from "./Cta.astro";
         </ul>
         <p class="mt-auto pt-1 text-sm text-muted">Typical timeline: {s.timeline}</p>
         <div data-for="local" class="grid">
-          <Cta href={whatsappUrlFor(s.name)} external>Get a quote in 24h</Cta>
+          <Cta href={whatsappUrlFor(s.name)} external event="quote-click" location="services" service={s.name}>Get a quote in 24h</Cta>
         </div>
         <div data-for="international" class="grid">
-          <Cta href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Quote request: ${s.name}`)}`}>Get a quote in 24h</Cta>
+          <Cta href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Quote request: ${s.name}`)}`} event="quote-click" location="services" service={s.name}>Get a quote in 24h</Cta>
         </div>
       </article>
     ))}

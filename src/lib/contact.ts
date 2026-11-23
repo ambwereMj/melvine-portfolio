@@ -21,7 +21,14 @@ export function whatsappFallbackUrl(f: { name: string; contact: string; message:
   const text =
     `Hi Melvine, I saw your portfolio. I need: ${f.message} · Budget: ${f.budget || "___"} · Deadline: ___` +
     `\nName: ${f.name}\nContact: ${f.contact}`;
-  return whatsappUrlWithText(text);
+  return whatsappUrlWithText(wellFormed(text));
+}
+
+/** Replace lone surrogates (from odd pastes) with U+FFFD so encodeURIComponent can't throw. */
+function wellFormed(s: string): string {
+  const native = (s as unknown as { toWellFormed?: () => string }).toWellFormed;
+  if (native) return native.call(s);
+  return s.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "�");
 }
 
 /** Build-time guard: the no-JS redirect must not point at the placeholder domain once the form is live. */

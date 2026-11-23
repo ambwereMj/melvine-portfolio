@@ -37,3 +37,8 @@ it("with a key the form works without JavaScript; without one it stays hidden un
   });
   expect(formAttributes(null, "https://example.com")).toEqual({ hidden: true, action: undefined, method: undefined, redirect: undefined });
 });
+
+it("fallback survives a lone surrogate in pasted text", () => {
+  const url = whatsappFallbackUrl({ name: "A", contact: "a@b.co", message: "a\uD800b", budget: "" });
+  expect(decodeURIComponent(url.split("?text=")[1])).toContain("I need: a�b");
+});

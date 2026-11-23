@@ -19,9 +19,9 @@ it("section links are in-page on home and absolute elsewhere", () => {
 });
 it("case studies are labelled by project and link to their pages", () => {
   expect(home.filter((c) => c.group === "Case studies").map((c) => [c.label, c.href])).toEqual([
-    ["Luxe Condos", "/work/luxe-condos"],
-    ["Opportunity Finder", "/work/opportunity-finder"],
-    ["Applaude", "/work/applaude"],
+    ["Luxe Condos", "/work/luxe-condos/"],
+    ["Opportunity Finder", "/work/opportunity-finder/"],
+    ["Applaude", "/work/applaude/"],
   ]);
 });
 it("contact and display actions", () => {

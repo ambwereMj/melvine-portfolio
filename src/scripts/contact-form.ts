@@ -1,4 +1,5 @@
 import { whatsappFallbackUrl } from "../lib/contact";
+import { track } from "../lib/analytics";
 
 const MESSAGES: Record<string, string> = {
   name: "Please enter your name.",
@@ -61,6 +62,7 @@ export function initContactForm(form: HTMLFormElement): void {
     if (!key) {
       // In-app browsers can block the popup, so the same link is always shown too.
       showWithLink("Opening WhatsApp with your message…", fallback);
+      track("contact-send", { method: "whatsapp-fallback", location: "contact" });
       window.open(fallback, "_blank", "noopener");
       return;
     }
@@ -76,11 +78,19 @@ export function initContactForm(form: HTMLFormElement): void {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ access_key: key, subject: "New portfolio enquiry", ...v }),
+        body: JSON.stringify({
+          access_key: key,
+          subject: "New portfolio enquiry",
+          ...v,
+          // Lets Melvine hit "reply" in his inbox when the visitor left an email address.
+          ...(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.contact) ? { replyto: v.contact } : {}),
+        }),
         signal: AbortSignal.timeout(Number(form.dataset.timeoutMs) || 15000),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = (await res.json().catch(() => ({}))) as { success?: boolean };
+      if (!res.ok || json.success !== true) throw new Error(`HTTP ${res.status}`);
       status.textContent = SUCCESS;
+      track("contact-send", { method: "web3forms", location: "contact" });
       form.reset();
     } catch {
       showWithLink(FAILURE, fallback);
